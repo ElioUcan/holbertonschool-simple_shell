@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 char *buffer = NULL;
 size_t bufsize = 0;
 ssize_t line;
-char *args[] = {buffer, NULL};
+char *args[];
 pid_t ch_pid;
 
 while (1)
@@ -28,7 +28,7 @@ return (0);
 buffer[line - 1] = '\0';
 if (buffer[0] == '\0')
 continue;
-
+args = {buffer, NULL};
 ch_pid = fork();
 if (ch_pid == -1)
 {

@@ -60,6 +60,7 @@ line = getline(&buffer, &bufsize, stdin);
 if (line == -1)
 {
 free(buffer);
+if (isatty(STDIN_FILENO))
 putchar('\n');
 return (0);
 }

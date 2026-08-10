@@ -64,11 +64,12 @@ if (isatty(STDIN_FILENO))
 putchar('\n');
 return (0);
 }
-args[0] = buffer;
-args[1] = NULL;
-buffer[line - 1] = '\0';
-if (buffer[0] == '\0')
+args[0] = strtok(buffer, " \n\t");
+if (args[0] == NULL)
 continue;
+args[1] = NULL;
+
+
 
 ch_pid = fork();
 gb = uz_sh(ch_pid, buffer, args, argv[0]);

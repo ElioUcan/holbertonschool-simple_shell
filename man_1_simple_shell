@@ -1,0 +1,12 @@
+hsh    
+
+NAME
+    hsh - simple shell
+
+
+DESCRIPTION
+    hsh is a simple shell program that has an interactive and a 
+    non-interactive move, the shell.
+
+RETURN VALUE
+    nothing

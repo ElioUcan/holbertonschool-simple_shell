@@ -52,7 +52,9 @@ if (argc == 1)
 {
 while (1)
 {
+if (isatty(STDIN_FILENO))
 printf("UZ$ ");
+
 line = getline(&buffer, &bufsize, stdin);
 
 if (line == -1)

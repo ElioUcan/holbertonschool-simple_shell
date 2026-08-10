@@ -6,13 +6,14 @@
  * @buffer: char *
  * @args: char *
  * @argv: char *
- * Return: void
+ * Return: -1 if failure 0 otherwise
  */
-void uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv)
+int uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv)
 {
 if (ch_pid == -1)
 {
 perror("Error in fork");
+return (-1);
 }
 else if (ch_pid == 0)
 {
@@ -26,12 +27,13 @@ exit(1);
 else
 {
 wait(NULL);
+return (0);
 }
 }
 
 
 /**
- * main - prints a hello world message
+ * main - runs the simple shell
  * @argc: int
  * @argv: char *
  * Return: 0 if success, otherwise -1
@@ -39,11 +41,11 @@ wait(NULL);
 int main(int argc, char *argv[])
 {
 char *buffer = NULL;
-size_t bufsize = 0;
-ssize_t line;
 char *args[2];
+ssize_t line;
+size_t bufsize = 0;
 pid_t ch_pid;
-
+int gb;
 
 if (argc == 1)
 {
@@ -65,7 +67,9 @@ if (buffer[0] == '\0')
 continue;
 
 ch_pid = fork();
-uz_sh(ch_pid, buffer, args, argv[0]);
+gb = uz_sh(ch_pid, buffer, args, argv[0]);
+if (gb == -1)
+return (0);
 }
 }
 return (0);

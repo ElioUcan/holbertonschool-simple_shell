@@ -42,11 +42,11 @@ return (0);
 int main(int argc, char *argv[])
 {
 char *buffer = NULL;
-char *args[2];
+char *args[64];
 ssize_t line;
 size_t bufsize = 0;
 pid_t ch_pid;
-int gb;
+int gb, i;
 
 if (argc == 1)
 {
@@ -67,8 +67,11 @@ return (0);
 args[0] = strtok(buffer, " \n\t");
 if (args[0] == NULL)
 continue;
-args[1] = NULL;
-
+i = 1;
+while ((args[i] = strtok(NULL, " \n\t")) != NULL)
+{
+i++;
+}
 
 
 ch_pid = fork();

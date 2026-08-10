@@ -10,7 +10,7 @@
 #include  <stdio.h>
 
 int main(int argc, char *argv[]);
-void uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv);
+int uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv);
 
 
 #endif

@@ -17,7 +17,7 @@ return (-1);
 }
 else if (ch_pid == 0)
 {
-if (execve(buffer, args, NULL) == -1)
+if (execve(args[0], args, NULL) == -1)
 {
 perror(argv);
 free(buffer);

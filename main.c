@@ -13,7 +13,6 @@ char *args[64];
 ssize_t line;
 size_t bufsize = 0;
 int exit_status = 0;
-int i;
 (void)argc;
 while (1)
 {

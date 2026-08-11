@@ -64,4 +64,4 @@ man ./man_1_simple_shell
 
 ## Author
 
-ElioUZ <elioeduardo06@gmail.com>
+ElioUZ 

@@ -1,6 +1,69 @@
 #include "main.h"
 
 /**
+ * uz_path - gives the PATH
+ * @env: char *
+ * @args: char *
+ * Return: char
+ */
+
+char *uz_path(char *env[], char *args[])
+{
+char *path_copy;
+char *dir_token;
+char *path_comp;
+int i = 0;
+while (env[i])
+{
+if (strncmp(env[i], "PATH=", 5) == 0)
+{
+path_copy = strdup(env[i] + 5);
+dir_token = strtok(path_copy, ":");
+
+while (dir_token != NULL)
+{
+path_comp = malloc(sizeof(char) * (strlen(dir_token) + strlen(args[0]) + 2));
+if (path_comp == NULL)
+return (NULL);
+
+strcpy(path_comp, dir_token);
+strcat(path_comp, "/");
+strcat(path_comp, args[0]);
+
+if (access(path_comp, X_OK) == 0)
+{
+free(path_copy);
+return (path_comp);
+}
+free(path_comp);
+dir_token = strtok(NULL, ":");
+}
+free(path_copy);
+break;
+}
+i++;
+}
+return (NULL);
+}
+
+/**
+ * tokenize_input - tokenizes the input
+ * @buffer: char *
+ * @args: char*
+ */
+void tokenize_input(char *buffer, char *args[])
+{
+int i = 0;
+args[0] = strtok(buffer, " \n\t");
+while (args[i] != NULL)
+{
+i++;
+args[i] = strtok(NULL, " \n\t");
+}
+}
+
+
+/**
  * uz_sh - executes a command in a child process
  * @ch_pid: pid_t
  * @buffer: char *
@@ -32,31 +95,55 @@ return (0);
 return (0);
 }
 
+/**
+ * handle_execution - resolves PATH and makes fork
+ * @args: char *
+ * @env: char *
+ * @argv_0:  char *
+ * @buffer:  char *
+ * Return: 0 if good -1 if bad
+ */
+int handle_execution(char *args[], char *env[], char *argv_0, char *buffer)
+{
+char *path_result = NULL;
+pid_t ch_pid;
+int gb;
+if (access(args[0], X_OK) != 0)
+{
+path_result = uz_path(env, args);
+if (path_result == NULL)
+{
+fprintf(stderr, "%s: 1: %s: not found\n", argv_0, args[0]);
+return (0);
+}
+args[0] = path_result;
+}
+ch_pid = fork();
+gb = uz_sh(ch_pid, buffer, args, argv_0);
+if (path_result != NULL)
+free(path_result);
+return (gb);
+}
 
 /**
  * main - runs the simple shell
  * @argc: int
  * @argv: char *
+ * @env: char *
  * Return: 0 if success, otherwise -1
  */
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *env[])
 {
 char *buffer = NULL;
 char *args[64];
 ssize_t line;
 size_t bufsize = 0;
-pid_t ch_pid;
-int gb, i;
-
-if (argc == 1)
-{
+(void)argc;
 while (1)
 {
 if (isatty(STDIN_FILENO))
 printf("UZ$ ");
-
 line = getline(&buffer, &bufsize, stdin);
-
 if (line == -1)
 {
 free(buffer);
@@ -64,21 +151,11 @@ if (isatty(STDIN_FILENO))
 putchar('\n');
 return (0);
 }
-args[0] = strtok(buffer, " \n\t");
+tokenize_input(buffer, args);
 if (args[0] == NULL)
 continue;
-i = 1;
-while ((args[i] = strtok(NULL, " \n\t")) != NULL)
-{
-i++;
-}
-
-
-ch_pid = fork();
-gb = uz_sh(ch_pid, buffer, args, argv[0]);
-if (gb == -1)
-return (0);
-}
+if (handle_execution(args, env, argv[0], buffer) == -1)
+break;
 }
 return (0);
 }

@@ -11,6 +11,8 @@
 
 int main(int argc, char *argv[]);
 int uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv);
-
+int handle_execution(char *args[], char *env[], char *argv_0, char *buffer);
+void tokenize_input(char *buffer, char *args[]);
+char *uz_path(char *env[], char *args[]);
 
 #endif

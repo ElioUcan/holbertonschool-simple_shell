@@ -14,5 +14,6 @@ int uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv);
 int handle_execution(char *args[], char *env[], char *argv_0, char *buffer);
 void tokenize_input(char *buffer, char *args[]);
 char *uz_path(char *env[], char *args[]);
+int check_builtins(char *args[], char *buffer, char *env[], int exit_status);
 
 #endif

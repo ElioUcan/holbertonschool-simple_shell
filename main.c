@@ -164,11 +164,20 @@ putchar('\n');
 return (exit_status);
 }
 tokenize_input(buffer, args);
-if (args[0] == NULL)
-continue;
-exit_status = handle_execution(args, env, argv[0], buffer);
+if (args[0] != NULL)
+{
+if (strcmp(args[0], "exit") == 0)
+{
+free(buffer);
+exit(exit_status);
+}
+exit_status = handle_execution(args, env, argv[0], exit_status);
 if (exit_status == -1)
+{
+free(buffer);
 break;
+}
+}
 }
 return (exit_status);
 }

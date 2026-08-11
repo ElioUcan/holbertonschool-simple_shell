@@ -84,7 +84,7 @@ if (execve(args[0], args, NULL) == -1)
 {
 perror(argv);
 free(buffer);
-exit(1);
+exit(2);
 }
 }
 else

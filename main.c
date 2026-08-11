@@ -114,7 +114,7 @@ path_result = uz_path(env, args);
 if (path_result == NULL)
 {
 fprintf(stderr, "%s: 1: %s: not found\n", argv_0, args[0]);
-return (0);
+return (127);
 }
 args[0] = path_result;
 }
@@ -138,6 +138,7 @@ char *buffer = NULL;
 char *args[64];
 ssize_t line;
 size_t bufsize = 0;
+int exit_status = 0;
 (void)argc;
 while (1)
 {
@@ -149,13 +150,14 @@ if (line == -1)
 free(buffer);
 if (isatty(STDIN_FILENO))
 putchar('\n');
-return (0);
+return (exit_status);
 }
 tokenize_input(buffer, args);
 if (args[0] == NULL)
 continue;
-if (handle_execution(args, env, argv[0], buffer) == -1)
+exit_status = handle_execution(args, env, argv[0], buffer);
+if (exit_status == -1)
 break;
 }
-return (0);
+return (exit_status);
 }

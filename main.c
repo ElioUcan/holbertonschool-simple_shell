@@ -73,6 +73,7 @@ args[i] = strtok(NULL, " \n\t");
  */
 int uz_sh(pid_t ch_pid, char *buffer, char *args[], char *argv)
 {
+int status;
 if (ch_pid == -1)
 {
 perror("Error in fork");
@@ -89,8 +90,8 @@ exit(2);
 }
 else
 {
-wait(NULL);
-return (0);
+wait(&status);
+return (status / 256);
 }
 return (0);
 }
